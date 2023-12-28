@@ -1,0 +1,32 @@
+name: Windows Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up MSVC
+      uses: microsoft/setup-msvc@v2
+      with:
+        vswhere: latest
+
+    - name: Build
+      run: |
+        # Your build commands here
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: artifacts
+        path: bin
