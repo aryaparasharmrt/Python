@@ -1,0 +1,50 @@
+name: Issue Triage
+
+on: 
+ issues:
+  types:
+   - opened
+   - labeled
+   - edited
+
+jobs:
+ triage:
+  runs-on: ubuntu-latest
+
+  steps:
+    - name: Check for bug label
+      if: contains(github.event.issue.title, 'bug') || contains(github.event.issue.body, 'bug')
+      run: |
+       echo "Labeling as bug"
+       curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels \
+            -d '["bug"]'
+
+    - name: Check for feature label   
+      if: contains(github.event.issue.title, 'feature') || contains(github.event.issue.body, 'feature')
+      run: |
+       echo "Labeling as feature"
+       curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels \
+            -d '["feature"]'
+        
+    - name: Check for triage label
+      run: |
+        echo "Labeling as triage"
+        curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+             -H "Accept: application/vnd.github.v3+json" \
+             https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels \
+             -d '["triage"]'
+     
+
+
+
+
+
+
+
+
+
+           
